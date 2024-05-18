@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.7"
 
 services:
   nginx:
@@ -9,7 +9,7 @@ services:
     env_file:
       - ./.env
     ports:
-      - "443:443"
+      - "443"
     networks:
       - my_custom
     depends_on:
@@ -30,7 +30,7 @@ services:
     depends_on:
       - mariadb
     expose:
-      - "9000:9000"
+      - "9000"
     restart: always
 
   mariadb:
@@ -45,7 +45,7 @@ services:
     networks:
       - my_custom
     expose:
-      - "3306:3306"
+      - "3306"
     restart: always
 
 networks:
