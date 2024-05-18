@@ -3,7 +3,8 @@ version: "3.7"
 services:
   nginx:
     build:
-      dockerfile: ./requirements/NGINX/Dockerfile
+      context: ./requirements/NGINX
+      dockerfile: Dockerfile
     image: nginx
     container_name: nginx
     env_file:
@@ -18,7 +19,8 @@ services:
 
   wordpress:
     build:
-      dockerfile: ./requirements/WordPress/Dockerfile
+      context: ./requirements/WordPress  # Specify the build context
+      dockerfile: Dockerfile
     image: wordpress
     container_name: wordpress
     env_file:
@@ -35,7 +37,8 @@ services:
 
   mariadb:
     build:
-      dockerfile: ./requirements/MariaDB/Dockerfile
+      context: ./requirements/MariaDB
+      dockerfile: Dockerfile
     image: mariadb
     container_name: mariadb
     env_file:
