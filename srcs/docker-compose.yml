@@ -1,59 +1,50 @@
-version: "3.7"
-
+version: "3.9"
 services:
   nginx:
     build:
-      context: ./requirements/NGINX
-      dockerfile: Dockerfile
-    image: nginx
+      dockerfile: ./requirements/nginx/Dockerfile
     container_name: nginx
     env_file:
       - ./.env
+    volumes:
+      - wordpress:/var/www/html/wordpress
     ports:
-      - "443"
+      - "443:443"
     networks:
-      - my_custom
+      - web
     depends_on:
       - wordpress
-    restart: always
-
+    restart: on-failure
   wordpress:
     build:
-      context: ./requirements/WordPress  # Specify the build context
-      dockerfile: Dockerfile
-    image: wordpress
+      dockerfile: ./requirements/wordpress/Dockerfile
     container_name: wordpress
     env_file:
       - ./.env
     volumes:
       - wordpress:/var/www/html/wordpress
     networks:
-      - my_custom
+      - web
+    expose:
+      - "9000:9000"
     depends_on:
       - mariadb
-    expose:
-      - "9000"
-    restart: always
-
+    restart: on-failure
   mariadb:
     build:
-      context: ./requirements/MariaDB
-      dockerfile: Dockerfile
-    image: mariadb
+      dockerfile: ./requirements/mariadb/Dockerfile
     container_name: mariadb
-    env_file:
-      - ./.env
     volumes:
       - mariadb:/var/lib/mysql
     networks:
-      - my_custom
+      - web
+    env_file:
+      - ./.env
     expose:
-      - "3306"
-    restart: always
-
+      - "3306:3306"
+    restart: on-failure
 networks:
-  my_custom:
-
+  web:
 volumes:
   wordpress:
     name: wordpress
@@ -61,12 +52,11 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/Users/${USER}/data/wordpress'
-  
+      device: '/home/${USER}/data/wordpress'
   mariadb:
     name: mariadb
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/Users/${USER}/data/mariadb'
+      device: '/home/${USER}/data/mariadb'

@@ -6,8 +6,7 @@ RUN apt update && apt install -y \
     mariadb-server \
     mariadb-client
 
-COPY ./requirements/MariaDB/mentry.sh /usr/local/bin/
+COPY ./requirements/mariadb/tools/docker_entry.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker_entry.sh
 
-RUN chmod +x /usr/local/bin/mentry.sh
-
-CMD mentry.sh
+CMD ["docker_entry.sh"]

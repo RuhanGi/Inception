@@ -1,29 +1,28 @@
-DIR = /Users/${USER}/data
+all: inception
 
-NAME = inception
-
-.SILENT:
-
-all: $(NAME)
-
-$(NAME):
-	rm -rf ${DIR}
-	mkdir ${DIR}
-	mkdir ${DIR}/MariaDB
-	mkdir ${DIR}/WordPress
-
-	docker-compose -f ./srcs/docker-compose.yml up --build -d
-	
-	printf "\x1B[32m$(NAME) ready\x1B[0m\n";
+inception:
+	mkdir -p /home/${USER}/data/mariadb
+	mkdir -p /home/${USER}/data/wordpress
+	docker compose -f ./srcs/docker-compose.yml up --build -d
 
 clean:
-	docker-compose -f ./srcs/docker-compose.yml down --rmi all -v --remove-orphans 2>/dev/null || true
+	docker compose -f ./srcs/docker-compose.yml down --rmi all -v --remove-orphans 2>/dev/null || true
 
 fclean: clean
-	rm -rf ${DIR}/*
+	rm -rf /home/${USER}/data/*
 	docker rmi -f $$(docker images -a -q) 2> /dev/null || true
 	docker volume prune -f
 
 re: fclean all
 
 .PHONY: all clean fclean re
+
+# docker exec -it mariadb bash
+# mysql -u root -p
+# use wordpress;
+# show tables;
+# select * from wp_users;
+# select * from wp_comments;
+
+# docker ps
+# docker volume prune

@@ -17,9 +17,9 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 	chmod +x wp-cli.phar && \
 	mv wp-cli.phar /usr/local/bin/wp
 
-COPY ./requirements/WordPress/www.conf /etc/php/7.4/fpm/pool.d/
+COPY ./requirements/wordpress/conf/www.conf /etc/php/7.4/fpm/pool.d/
 
-COPY ./requirements/WordPress/entry.sh /usr/local/bin/
+COPY ./requirements/wordpress/tools/docker_entry.sh /usr/local/bin/
+RUN	 chmod +x /usr/local/bin/docker_entry.sh
 
-# ENTRYPOINT ["entry.sh"]
-CMD entry.sh
+ENTRYPOINT ["docker_entry.sh"]
